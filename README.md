@@ -9,7 +9,7 @@ An RPG game inspired by PMTTYD but with more horror like themes and imagry.
     <li>Player character</li>
     <li>Friendly NPCs</li>
     <li>Normal Objects</li>
-    <li>Natural scene elements<li>
+    <li>Natural scene elements</li>
 </ul>
 <h3>3D elements</h3>
 <ul>

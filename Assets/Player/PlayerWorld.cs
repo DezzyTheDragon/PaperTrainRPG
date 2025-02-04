@@ -20,12 +20,16 @@ public class PlayerWorld : MonoBehaviour
     private GameObject indicator;
     Interactable interactable;
 
-    
-    void Start()
+
+    private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+    }
+
+    void Start()
+    {
+        //characterController = GetComponent<CharacterController>();
         indicator.SetActive(false);
-        
     }
 
     void Update()
@@ -89,6 +93,14 @@ public class PlayerWorld : MonoBehaviour
     public void OnAction(InputAction.CallbackContext context) { }
 
     public void OnMenu(InputAction.CallbackContext context) { }
+
+    public void WarpPosition(Vector3 pos) 
+    {    
+        Debug.Log("CC is not null");
+        characterController.enabled = false;
+        transform.position = pos;
+        characterController.enabled = true;
+    }
 
     public void OnTriggerEnter(Collider other)
     {

@@ -1,6 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+//TODO:
+//  X Create interface for combat
+//    X Get name - Returns entity name
+//    X Highlight - Highlights the entity, arrow points to the enemy you want to hit or friend you want to heal
+//    X Do Turn - Execute the action for that entities turn
+//    * Set Status - this would be for poison, slow healing, confused, etc
+//  X Create CombatAction base class
+//    X target enum (FOE, ALLY, AOE_FOE, AOE_ALLY, NONE)
+//    X Get name
+//    X Get description
+//    X Get target type
+//    X Execute Action
+//  - Construct battle field
+//    * Place players
+//    * Place enemies
+//    * Generate player UI
+//      - Instantiate player actions
+//      - Instantiate enemy button lists
+//    * Re-theme stage (not priority)
+//  - Player Turn
+//    * Button saves action
+//    * Button selects target
+//    * Run action
+//  - Enemy Turn
+//    * Run action
+
+
 enum combatState { START, PLAYERTURN, ENEMYTURN, WON, LOST};
 
 public class CombatSystem : MonoBehaviour
@@ -20,8 +48,7 @@ public class CombatSystem : MonoBehaviour
 
     private void Start()
     {
-
-        StartCoroutine(InitCombat());
+        //StartCoroutine(InitCombat());
     }
 
     private IEnumerator InitCombat() 

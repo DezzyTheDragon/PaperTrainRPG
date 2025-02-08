@@ -13,6 +13,13 @@ public class PlayerStats
     private int maxMP = 10;
     private int currentMP;
 
+    //Combat action info
+    // - List of Attack Actions
+    // - List of Non-Attack Actions
+
+    //DEBUG
+    private List<CombatActionBase> combatAction = new List<CombatActionBase> { new TestAttack(), new TestAttack2(), new TestHeal() };
+
     public static PlayerStats GetInstatnce() 
     {
         if (instance == null)
@@ -61,5 +68,10 @@ public class PlayerStats
     {
         currentMP += add;
         if (currentMP > maxMP) currentMP = maxMP;
+    }
+
+    public List<CombatActionBase> GetAttackActions()
+    {
+        return combatAction;
     }
 }

@@ -7,15 +7,13 @@ public enum targetType { FOE, AOE_FOE, ALLY, AOE_ALLY, NONE }
 
 public class CombatActionBase
 {
-    protected targetType targetType;
+    protected targetType type;
     protected string name;
     protected string description;
 
-    public static int GetAttackID() { return -1; }
-
     public targetType GetTargetType()
     {
-        return targetType;
+        return type;
     }
     public string GetName()
     {
@@ -26,7 +24,7 @@ public class CombatActionBase
         return description;
     }
 
-    public void ExecuteAction()
+    public virtual void ExecuteAction()
     {
         
     }

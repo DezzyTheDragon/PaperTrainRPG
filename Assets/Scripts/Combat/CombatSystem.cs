@@ -15,8 +15,8 @@ using UnityEngine;
 //    X Get target type
 //    X Execute Action
 //  - Construct battle field
-//    * Place players
-//    * Place enemies
+//    X Place players
+//    X Place enemies
 //    * Generate player UI
 //      - Instantiate player actions
 //      - Instantiate enemy button lists
@@ -25,6 +25,7 @@ using UnityEngine;
 //    * Button saves action
 //    * Button selects target
 //    * Run action
+//    * Action QT
 //  - Enemy Turn
 //    * Run action
 
@@ -38,9 +39,12 @@ public class CombatSystem : MonoBehaviour
     //private int enemyCount;
 
     private List<GameObject> enemyList = new List<GameObject>();
+    private GameObject player;
 
     [Header("Config")]
+    public GameObject playerPrefab;
     public List<GameObject> enemySpawns = new List<GameObject>();
+    public GameObject playerSpawn;
     [SerializeField] private CombatUI combatUI;
 
     [Header("DEBUG")]
@@ -48,19 +52,29 @@ public class CombatSystem : MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(InitCombat());
+        StartCoroutine(InitCombat());
     }
 
     private IEnumerator InitCombat() 
     {
+        // Create and place player objects
+        player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
+        //TESTING ===========
+        combatUI.ConfigureAttackPanel(PlayerStats.GetInstatnce().GetAttackActions());
+        //===================
+
+        // NOTE: If a companion is added they would be created here as well
+        
+        // Create and place enemies
         int i = 0;
         foreach (GameObject enemy in enemyRoster)
         {
-            enemyList.Add(Instantiate(enemy, enemySpawns[i].transform.position, enemySpawns[i].transform.rotation));
+            enemyList.Add(Instantiate(enemy, enemySpawns[i].transform.position, Quaternion.identity));
             i++;
         }
-        combatUI.ConfigureEnemyPanel(enemyList);
-        return null;
+        //combatUI.ConfigureEnemyPanel(enemyList);
+        
+        yield return new WaitForEndOfFrame();
     }
     
 

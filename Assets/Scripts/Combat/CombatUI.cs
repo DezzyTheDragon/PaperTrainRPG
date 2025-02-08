@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//NOTE: This will be changed at the UI changes
+
 public class CombatUI : MonoBehaviour
 {
     [SerializeField] private GameObject attackPanel;
@@ -41,6 +43,17 @@ public class CombatUI : MonoBehaviour
         activePanel.SetActive(false);
         targetPanel.SetActive(true);
         activePanel = targetPanel;
+    }
+
+    public void ConfigureAttackPanel(List<CombatActionBase> attackActions) 
+    {
+        int i = 0;
+        foreach (CombatActionBase attack in attackActions)
+        {
+            //GameObject tempButton = Instantiate(buttonPrefab, new Vector3(0, 35 * i, 0), Quaternion.identity, attackPanel.gameObject.transform);
+            //tempButton.GetComponentInChildren<TextMesh>().text = attack.GetName();
+            //tempButton.GetComponent<Button>().onClick += TODO: Add function select here
+        }
     }
 
     public void ConfigureEnemyPanel(List<GameObject>enemyRoster)

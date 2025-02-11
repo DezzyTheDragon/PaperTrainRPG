@@ -9,6 +9,7 @@ public class ConfigCombatButton : MonoBehaviour
     private string actionName;
     private TMP_Text text;
     private Texture2D image;
+    private CombatActionBase combatAction;
     [SerializeField] private GameObject icon;
     [SerializeField] private GameObject buttonText;
 
@@ -17,12 +18,18 @@ public class ConfigCombatButton : MonoBehaviour
         
     }
 
-    public void setData(string name, string resource)
+    public void setData(string name, string resource, CombatActionBase action)
     {
         actionName = name;
         text = buttonText.GetComponent<TMP_Text>();
         text.text = name;
         Debug.LogError("Texture loading not implemented");
         //image = icon.GetComponent<>();
+        combatAction = action;
+    }
+
+    public CombatActionBase getButtonAction() 
+    { 
+        return combatAction; 
     }
 }

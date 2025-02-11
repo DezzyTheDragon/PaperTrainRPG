@@ -6,10 +6,12 @@ public class PlayerCombat : MonoBehaviour, ICombat
 {
     PlayerStats stats = PlayerStats.GetInstatnce();
 
+    [SerializeField] private GameObject indicator;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        indicator.SetActive(false);
     }
 
     // Update is called once per frame
@@ -30,12 +32,12 @@ public class PlayerCombat : MonoBehaviour, ICombat
 
     public void Highlight()
     {
-        throw new System.NotImplementedException();
+        indicator.SetActive(true);
     }
 
     public void Unhighlight()
     {
-        throw new System.NotImplementedException();
+        indicator.SetActive(false);
     }
 
     

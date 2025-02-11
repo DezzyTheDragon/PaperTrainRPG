@@ -17,6 +17,8 @@ public class PlayerStats
     // - List of Attack Actions
     // - List of Non-Attack Actions
 
+    private List<CombatActionBase> actionList = new List<CombatActionBase> { new DefendAction(), new FleeAction() };
+
     //DEBUG
     private List<CombatActionBase> combatAction = new List<CombatActionBase> { new TestAttack(), new TestAttack2(), new TestHeal() };
 
@@ -73,5 +75,10 @@ public class PlayerStats
     public List<CombatActionBase> GetAttackActions()
     {
         return combatAction;
+    }
+
+    public List<CombatActionBase> GetActions()
+    {
+        return actionList;
     }
 }

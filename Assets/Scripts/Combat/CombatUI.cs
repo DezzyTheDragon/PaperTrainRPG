@@ -7,31 +7,33 @@ using UnityEngine.UI;
 
 public class CombatUI : MonoBehaviour
 {
+    private CombatSystem combatSystem;
+
+    //UI ELEMENT REFERENCE
     [SerializeField] private Button attackButton;
     [SerializeField] private Button itemButton;
     [SerializeField] private Button actionButton;
-
     [SerializeField] private GameObject magicPageImage;
     [SerializeField] private GameObject itemPageImage;
     [SerializeField] private GameObject actionPageImage;
-
     [SerializeField] private GameObject pageTitle;
     private TMP_Text pageTitleText;
-
     [SerializeField] private GameObject leftPage;
     [SerializeField] private GameObject rightPage;
-
     [SerializeField] private GameObject buttonPrefab;
-
     [SerializeField] private GameObject scrollContent;
     private RectTransform scrollRectTransform;
-
     [SerializeField] private GameObject attackContent;
     [SerializeField] private GameObject itemContent;
     [SerializeField] private GameObject actionContent;
 
+    private List<Button> attackButtonList = new List<Button>();
+    private List<Button> itemButtonList = new List<Button>();
+    private List<Button> actionButtonList = new List<Button>();
+
     private void Start()
     {
+        combatSystem = GetComponentInParent<CombatSystem>();
         pageTitleText = pageTitle.GetComponent<TMP_Text>();
         scrollRectTransform = scrollContent.GetComponent<RectTransform>();
         attackButton.Select();
@@ -51,9 +53,25 @@ public class CombatUI : MonoBehaviour
                 attackContent.transform.position.x, 
                 attackContent.transform.position.y + (i * -30), 
                 attackContent.transform.position.z);
-            GameObject tempButton = Instantiate(buttonPrefab, pos, Quaternion.identity, attackContent.transform);
-            ConfigCombatButton temp = tempButton.GetComponent<ConfigCombatButton>();
-            temp.setData(attack.GetName(), "");
+            GameObject tempButtonObj = Instantiate(buttonPrefab, pos, Quaternion.identity, attackContent.transform);
+            Button tempButton = tempButtonObj.GetComponent<Button>();
+            attackButtonList.Add(tempButton);
+            ConfigCombatButton temp = tempButtonObj.GetComponent<ConfigCombatButton>();
+            tempButtonObj.name = attack.GetName() + " Button";
+            
+            temp.setData(attack.GetName(), "", attack);
+            tempButton.onClick.AddListener(delegate { combatSystem.SetCombatAction(attack); });
+
+            if(i > 0)
+            {
+                Navigation nav = attackButtonList[i - 1].navigation;
+                nav.selectOnDown = tempButton;
+                attackButtonList[i - 1].navigation = nav;
+
+                nav = tempButton.navigation;
+                nav.selectOnUp = attackButtonList[i - 1];
+                tempButton.navigation = nav;
+            }
 
             i++;
         }
@@ -66,9 +84,37 @@ public class CombatUI : MonoBehaviour
 
     }
 
-    private void initActionPage()
+    public void initActionPage(List<CombatActionBase> actions)
     {
+        int i = 0;
+        foreach(CombatActionBase action in actions)
+        {
+            Vector3 pos = new Vector3(
+                actionContent.transform.position.x, 
+                actionContent.transform.position.y + (i * -30), 
+                actionContent.transform.position.z);
+            GameObject tempButtonObj = Instantiate(buttonPrefab, pos, Quaternion.identity, actionContent.transform);
+            Button tempButton = tempButtonObj.GetComponent<Button>();
+            actionButtonList.Add(tempButton);
+            ConfigCombatButton temp = tempButtonObj.GetComponent<ConfigCombatButton>();
+            tempButtonObj.name = action.GetName() + " Button";
 
+            temp.setData(action.GetName(), "", action);
+            tempButton.onClick.AddListener(delegate { combatSystem.SetCombatAction(action); });
+
+            if (i > 0)
+            {
+                Navigation nav = actionButtonList[i - 1].navigation;
+                nav.selectOnDown = tempButton;
+                actionButtonList[i - 1].navigation = nav;
+
+                nav = tempButton.navigation;
+                nav.selectOnUp = actionButtonList[i - 1];
+                tempButton.navigation = nav;
+            }
+
+            i++;
+        }
     }
 
     private void clearLeftPage()
@@ -112,6 +158,12 @@ public class CombatUI : MonoBehaviour
     public void confirmAttackPage()
     {
         //Generate attack buttons and move focus to right page
+
+        attackContent.SetActive(true);
+        itemContent.SetActive(false);
+        actionContent.SetActive(false);
+
+        attackButtonList[0].Select();
     }
 
     public void confirmItemPage()
@@ -122,5 +174,11 @@ public class CombatUI : MonoBehaviour
     public void confirmActionPage()
     {
         //Generate action buttons and move focus to right page
+
+        attackContent.SetActive(false);
+        itemContent.SetActive(false);
+        actionContent.SetActive(true);
+
+        actionButtonList[0].Select();
     }
 }

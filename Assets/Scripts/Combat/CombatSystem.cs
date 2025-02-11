@@ -14,12 +14,12 @@ using UnityEngine;
 //    X Get description
 //    X Get target type
 //    X Execute Action
-//  - Construct battle field
+//  X Construct battle field
 //    X Place players
 //    X Place enemies
-//    * Generate player UI
-//      - Instantiate player actions
-//      - Instantiate enemy button lists
+//    X Generate player UI
+//      X Instantiate player actions
+//      X Instantiate enemy button lists
 //    * Re-theme stage (not priority)
 //  - Player Turn
 //    * Button saves action
@@ -32,11 +32,19 @@ using UnityEngine;
 
 enum combatState { START, PLAYERTURN, ENEMYTURN, WON, LOST};
 
+struct battleConfig 
+{
+    bool canFlee;
+    List<GameObject> enemyList;
+};
+
 public class CombatSystem : MonoBehaviour
 {
     //private combatState currentState = combatState.START;
     //private int enemyIndex = 0;
     //private int enemyCount;
+
+    private CombatActionBase playerAction;
 
     private List<GameObject> enemyList = new List<GameObject>();
     private GameObject player;
@@ -60,8 +68,8 @@ public class CombatSystem : MonoBehaviour
         // Create and place player objects
         player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
         //TESTING ===========
-        //combatUI.ConfigureAttackPanel(PlayerStats.GetInstatnce().GetAttackActions());
         combatUI.initAttackPage(PlayerStats.GetInstatnce().GetAttackActions());
+        combatUI.initActionPage(PlayerStats.GetInstatnce().GetActions());
         //===================
 
         // NOTE: If a companion is added they would be created here as well
@@ -78,6 +86,24 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForEndOfFrame();
     }
     
+    public void SetCombatAction(CombatActionBase action)
+    {
+        playerAction = action;
+        if (playerAction.GetTargetType() == targetType.NONE)
+        {
+            //Advance combat state
+        }
+    }
+
+    public void SetTarget(GameObject enemy) 
+    {
+        //Advance combat state after target selection
+    }
+
+    public void SetAllTargets() 
+    {
+        //Advance combat state after selection
+    }
 
     //Evaluate the state of battle
     // check if enemies are alive/dead

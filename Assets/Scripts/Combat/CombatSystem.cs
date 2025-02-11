@@ -60,7 +60,8 @@ public class CombatSystem : MonoBehaviour
         // Create and place player objects
         player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
         //TESTING ===========
-        combatUI.ConfigureAttackPanel(PlayerStats.GetInstatnce().GetAttackActions());
+        //combatUI.ConfigureAttackPanel(PlayerStats.GetInstatnce().GetAttackActions());
+        combatUI.initAttackPage(PlayerStats.GetInstatnce().GetAttackActions());
         //===================
 
         // NOTE: If a companion is added they would be created here as well

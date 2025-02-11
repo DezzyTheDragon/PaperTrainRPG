@@ -1,73 +1,126 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//NOTE: This will be changed at the UI changes
 
 public class CombatUI : MonoBehaviour
 {
-    [SerializeField] private GameObject attackPanel;
-    [SerializeField] private GameObject itemPanel;
-    [SerializeField] private GameObject actionPanel;
-    [SerializeField] private GameObject targetPanel;
+    [SerializeField] private Button attackButton;
+    [SerializeField] private Button itemButton;
+    [SerializeField] private Button actionButton;
+
+    [SerializeField] private GameObject magicPageImage;
+    [SerializeField] private GameObject itemPageImage;
+    [SerializeField] private GameObject actionPageImage;
+
+    [SerializeField] private GameObject pageTitle;
+    private TMP_Text pageTitleText;
+
+    [SerializeField] private GameObject leftPage;
+    [SerializeField] private GameObject rightPage;
+
     [SerializeField] private GameObject buttonPrefab;
 
-    private List<GameObject> enemyButtons = new List<GameObject>();
+    [SerializeField] private GameObject scrollContent;
+    private RectTransform scrollRectTransform;
 
-    private GameObject activePanel;
+    [SerializeField] private GameObject attackContent;
+    [SerializeField] private GameObject itemContent;
+    [SerializeField] private GameObject actionContent;
 
-    public void OnAttackPressed() 
+    private void Start()
     {
-        attackPanel.SetActive(true);
-        activePanel = attackPanel;
-    }
-    public void OnItemsPressed() 
-    {
-        itemPanel.SetActive(true);
-        activePanel = itemPanel;
-    }
-    public void OnActionPressed() 
-    {
-        actionPanel.SetActive(true);
-        activePanel = actionPanel;
-    }
-    public void PanelReturn()
-    {
-        activePanel.SetActive(false);
-        activePanel = null;
+        pageTitleText = pageTitle.GetComponent<TMP_Text>();
+        scrollRectTransform = scrollContent.GetComponent<RectTransform>();
+        attackButton.Select();
     }
 
-    public void SwapPanel()
+    private void initCombatBook()
     {
-        activePanel.SetActive(false);
-        targetPanel.SetActive(true);
-        activePanel = targetPanel;
+        
     }
 
-    public void ConfigureAttackPanel(List<CombatActionBase> attackActions) 
+    public void initAttackPage(List<CombatActionBase> attacks)
     {
         int i = 0;
-        foreach (CombatActionBase attack in attackActions)
+        foreach(CombatActionBase attack in attacks)
         {
-            //GameObject tempButton = Instantiate(buttonPrefab, new Vector3(0, 35 * i, 0), Quaternion.identity, attackPanel.gameObject.transform);
-            //tempButton.GetComponentInChildren<TextMesh>().text = attack.GetName();
-            //tempButton.GetComponent<Button>().onClick += TODO: Add function select here
-        }
-    }
-
-    public void ConfigureEnemyPanel(List<GameObject>enemyRoster)
-    {
-        int i = 0;
-        foreach (GameObject enemy in enemyRoster)
-        {
-            GameObject tempButton = Instantiate(buttonPrefab, new Vector3(0, 35 * i, 0), Quaternion.identity, targetPanel.gameObject.transform);
-            enemyButtons.Add(tempButton);
-
-            tempButton.GetComponentInChildren<TextMesh>().text = enemy.name;
-            //tempButton.GetComponent<Button>().onClick += TODO: Add function select here
+            Vector3 pos = new Vector3(
+                attackContent.transform.position.x, 
+                attackContent.transform.position.y + (i * -30), 
+                attackContent.transform.position.z);
+            GameObject tempButton = Instantiate(buttonPrefab, pos, Quaternion.identity, attackContent.transform);
+            ConfigCombatButton temp = tempButton.GetComponent<ConfigCombatButton>();
+            temp.setData(attack.GetName(), "");
 
             i++;
         }
+
+        scrollRectTransform.sizeDelta = new Vector2(0, 30 * i);
+    }
+
+    private void initItemPage()
+    {
+
+    }
+
+    private void initActionPage()
+    {
+
+    }
+
+    private void clearLeftPage()
+    {
+        magicPageImage.SetActive(false);
+        itemPageImage.SetActive(false);
+        actionPageImage.SetActive(false);
+    }
+
+    public void showCombatBook()
+    {
+
+    }
+
+    public void hideCombatBook()
+    {
+
+    }
+
+    public void showMagicPage()
+    {
+        clearLeftPage();
+        magicPageImage.SetActive(true);
+        pageTitleText.text = "Attack";
+    }
+
+    public void showItemPage()
+    {
+        clearLeftPage();
+        itemPageImage.SetActive(true);
+        pageTitleText.text = "Items";
+    }
+
+    public void showActionPage()
+    {
+        clearLeftPage();
+        actionPageImage.SetActive(true);
+        pageTitleText.text = "Actions";
+    }
+
+    public void confirmAttackPage()
+    {
+        //Generate attack buttons and move focus to right page
+    }
+
+    public void confirmItemPage()
+    {
+        //Generate item buttons and move focus to right page
+    }
+
+    public void confirmActionPage()
+    {
+        //Generate action buttons and move focus to right page
     }
 }

@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 //TODO:
 //  X Create interface for combat
@@ -30,7 +33,8 @@ using UnityEngine;
 //    * Run action
 
 
-enum combatState { START, PLAYERTURN, ENEMYTURN, WON, LOST};
+//enum combatState { START, PLAYERTURN, ENEMYTURN, WON, LOST};
+enum combatState { BUILD, ACTION_SELECT, TARGET_SELECT, ATTACK_PHASE };
 
 struct battleConfig 
 {
@@ -40,7 +44,7 @@ struct battleConfig
 
 public class CombatSystem : MonoBehaviour
 {
-    //private combatState currentState = combatState.START;
+    private combatState currentState;
     //private int enemyIndex = 0;
     //private int enemyCount;
 
@@ -61,10 +65,25 @@ public class CombatSystem : MonoBehaviour
     private void Start()
     {
         StartCoroutine(InitCombat());
+        EventSystem.current.GetComponent<InputSystemUIInputModule>().cancel.action.performed += OnCancel;
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        if (currentState == combatState.ACTION_SELECT)
+        {
+            combatUI.CancelPage();
+        }
+        else if(currentState == combatState.TARGET_SELECT)
+        {
+            currentState = combatState.ACTION_SELECT;
+            combatUI.ShowBook();
+        }
     }
 
     private IEnumerator InitCombat() 
     {
+        currentState = combatState.BUILD;
         // Create and place player objects
         player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
         //TESTING ===========
@@ -81,22 +100,62 @@ public class CombatSystem : MonoBehaviour
             enemyList.Add(Instantiate(enemy, enemySpawns[i].transform.position, Quaternion.identity));
             i++;
         }
-        //combatUI.ConfigureEnemyPanel(enemyList);
+
+        combatUI.initEnemySelection(enemyList);
         
         yield return new WaitForEndOfFrame();
+
+        currentState = combatState.ACTION_SELECT;
     }
     
     public void SetCombatAction(CombatActionBase action)
     {
         playerAction = action;
-        if (playerAction.GetTargetType() == targetType.NONE)
+        combatUI.HideBook();
+        currentState = combatState.TARGET_SELECT;
+        if(action.GetTargetType() == targetType.NONE)
         {
-            //Advance combat state
+            //Advance battle state
+        }
+        else if(action.GetTargetType() == targetType.AOE_FOE || action.GetTargetType() == targetType.AOE_ALLY)
+        {
+            /*
+            //Request AEO target
+            if(action.GetTargetType() == targetType.AOE_FOE)
+            {
+                foreach(GameObject enemy in enemyList)
+                {
+                    enemy.GetComponent<ICombat>().Highlight();
+                }
+            }
+            else
+            {
+
+            }
+            */
+        }
+        else if(action.GetTargetType() == targetType.FOE || action.GetTargetType() == targetType.ALLY)
+        {
+            //Request single target
+            combatUI.RequestSingleTarget();
         }
     }
 
+    /*public void requestSingleTarget()
+    {
+        if (playerAction.GetTargetType() == targetType.ALLY)
+        {
+            //highlight ally players
+        }
+        else //targetType == FOE
+        {
+
+        }
+    }*/
+
     public void SetTarget(GameObject enemy) 
     {
+        currentState = combatState.ATTACK_PHASE;
         //Advance combat state after target selection
     }
 

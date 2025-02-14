@@ -7,20 +7,31 @@ using UnityEngine.UI;
 
 public class CombatUI : MonoBehaviour
 {
+    enum uiState { BOOK_ROOT, RIGHT_PGE, TARGETS};
+    enum activePage { NONE, ATTACKS, ITEMS, ACTIONS};
+    private uiState currentState;
+    private activePage currentPage;
+    
     private CombatSystem combatSystem;
 
     //UI ELEMENT REFERENCE
+    [SerializeField] private GameObject spellBook;
+    [SerializeField] private GameObject enemySelectContainer;
+    [Header("Buttons")]
     [SerializeField] private Button attackButton;
     [SerializeField] private Button itemButton;
     [SerializeField] private Button actionButton;
+    [SerializeField] private GameObject actionButtonPrefab;
+    [SerializeField] private GameObject targetButtonPrefab;
+    [Header("Left Page")]
+    [SerializeField] private GameObject leftPage;
     [SerializeField] private GameObject magicPageImage;
     [SerializeField] private GameObject itemPageImage;
     [SerializeField] private GameObject actionPageImage;
     [SerializeField] private GameObject pageTitle;
     private TMP_Text pageTitleText;
-    [SerializeField] private GameObject leftPage;
+    [Header("Right Page")]
     [SerializeField] private GameObject rightPage;
-    [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private GameObject scrollContent;
     private RectTransform scrollRectTransform;
     [SerializeField] private GameObject attackContent;
@@ -30,18 +41,36 @@ public class CombatUI : MonoBehaviour
     private List<Button> attackButtonList = new List<Button>();
     private List<Button> itemButtonList = new List<Button>();
     private List<Button> actionButtonList = new List<Button>();
+    private List<Button> enemyButtonList = new List<Button>();
 
     private void Start()
     {
         combatSystem = GetComponentInParent<CombatSystem>();
         pageTitleText = pageTitle.GetComponent<TMP_Text>();
         scrollRectTransform = scrollContent.GetComponent<RectTransform>();
+        ShowBook();
+    }
+
+    public void RequestSingleTarget() 
+    {
+        enemySelectContainer.SetActive(true);
+        enemyButtonList[0].Select();
+        currentState = uiState.TARGETS;
+    }
+
+    public void ShowBook()
+    {
+        attackContent.SetActive(false);
+        itemContent.SetActive(false);
+        actionContent.SetActive(false);
+        spellBook.SetActive(true);
+        currentState = uiState.BOOK_ROOT;
         attackButton.Select();
     }
 
-    private void initCombatBook()
+    public void HideBook()
     {
-        
+        spellBook.SetActive(false);
     }
 
     public void initAttackPage(List<CombatActionBase> attacks)
@@ -53,7 +82,7 @@ public class CombatUI : MonoBehaviour
                 attackContent.transform.position.x, 
                 attackContent.transform.position.y + (i * -30), 
                 attackContent.transform.position.z);
-            GameObject tempButtonObj = Instantiate(buttonPrefab, pos, Quaternion.identity, attackContent.transform);
+            GameObject tempButtonObj = Instantiate(actionButtonPrefab, pos, Quaternion.identity, attackContent.transform);
             Button tempButton = tempButtonObj.GetComponent<Button>();
             attackButtonList.Add(tempButton);
             ConfigCombatButton temp = tempButtonObj.GetComponent<ConfigCombatButton>();
@@ -93,7 +122,7 @@ public class CombatUI : MonoBehaviour
                 actionContent.transform.position.x, 
                 actionContent.transform.position.y + (i * -30), 
                 actionContent.transform.position.z);
-            GameObject tempButtonObj = Instantiate(buttonPrefab, pos, Quaternion.identity, actionContent.transform);
+            GameObject tempButtonObj = Instantiate(actionButtonPrefab, pos, Quaternion.identity, actionContent.transform);
             Button tempButton = tempButtonObj.GetComponent<Button>();
             actionButtonList.Add(tempButton);
             ConfigCombatButton temp = tempButtonObj.GetComponent<ConfigCombatButton>();
@@ -117,21 +146,37 @@ public class CombatUI : MonoBehaviour
         }
     }
 
+    public void initEnemySelection(List<GameObject> enemies) 
+    {
+        int i = 0;
+        foreach(GameObject enemy in enemies)
+        {
+            GameObject tempButtonObj = Instantiate(targetButtonPrefab, enemySelectContainer.transform);
+            Button tempButton = tempButtonObj.GetComponent<Button>();
+            tempButtonObj.GetComponent<CombatButton>().initButton(enemy);
+            enemyButtonList.Add(tempButton);
+            tempButton.onClick.AddListener(delegate { combatSystem.SetTarget(tempButtonObj.GetComponent<CombatButton>().GetTarget()); attackButton.Select(); });
+
+            if(i > 0)
+            {
+                Navigation nav = enemyButtonList[i - 1].navigation;
+                nav.selectOnRight = tempButton;
+                enemyButtonList[i - 1].navigation = nav;
+
+                nav = tempButton.navigation;
+                nav.selectOnLeft = enemyButtonList[i - 1];
+                tempButton.navigation = nav;
+            }
+
+            i++;
+        }
+    }
+
     private void clearLeftPage()
     {
         magicPageImage.SetActive(false);
         itemPageImage.SetActive(false);
         actionPageImage.SetActive(false);
-    }
-
-    public void showCombatBook()
-    {
-
-    }
-
-    public void hideCombatBook()
-    {
-
     }
 
     public void showMagicPage()
@@ -162,7 +207,7 @@ public class CombatUI : MonoBehaviour
         attackContent.SetActive(true);
         itemContent.SetActive(false);
         actionContent.SetActive(false);
-
+        currentState = uiState.RIGHT_PGE;
         attackButtonList[0].Select();
     }
 
@@ -178,7 +223,33 @@ public class CombatUI : MonoBehaviour
         attackContent.SetActive(false);
         itemContent.SetActive(false);
         actionContent.SetActive(true);
-
+        currentState = uiState.RIGHT_PGE;
         actionButtonList[0].Select();
+    }
+
+    public void CancelPage()
+    {
+        if (currentState == uiState.RIGHT_PGE)
+        {
+            Button temp = attackButton;
+            if (attackContent.activeSelf)
+            {
+                temp = attackButton;
+            }
+            else if (itemContent.activeSelf)
+            {
+                temp = itemButton;
+            }
+            else if (actionContent.activeSelf)
+            {
+                temp = actionButton;
+            }
+            attackContent.SetActive(false);
+            itemContent.SetActive(false);
+            actionContent.SetActive(false);
+            currentState = uiState.BOOK_ROOT;
+            temp.Select();
+        }
+        //TODO: add transition for canceling out of target selection and resuming on action selection
     }
 }

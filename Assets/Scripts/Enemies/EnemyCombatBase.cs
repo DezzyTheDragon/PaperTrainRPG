@@ -9,6 +9,7 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     protected string enemyName = "EnemyBase";
     protected int maxHP = 10;
     protected int currentHP;
+    protected Elements element;
 
     public void DoTurn()
     {
@@ -30,6 +31,25 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
         indicator.SetActive(false);
     }
 
+    public void Damage(int baseDamage, Elements attackElement)
+    {
+        int damage = baseDamage;
+        if (element.IsStrongAgainst(attackElement))
+        {
+            damage--;
+        }
+        else if (element.IsWeakAgainst(attackElement))
+        {
+            damage++;
+        }
+
+        currentHP -= damage;
+        if (currentHP < 0)
+        {
+            currentHP = 0;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,4 +61,6 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     {
         
     }
+
+    
 }

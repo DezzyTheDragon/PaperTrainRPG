@@ -10,6 +10,7 @@ public class CombatActionBase
     protected targetType type;
     protected string name;
     protected string description;
+    protected Elements element;
 
     public targetType GetTargetType()
     {
@@ -22,6 +23,11 @@ public class CombatActionBase
     public string GetDescription()
     {
         return description;
+    }
+
+    public Elements GetElement()
+    {
+        return element;
     }
 
     public virtual void ExecuteAction()

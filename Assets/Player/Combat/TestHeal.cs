@@ -9,6 +9,7 @@ public class TestHeal : CombatActionBase
         type = targetType.ALLY;
         name = "Test Heal";
         description = "A test heal";
+        element = new Elements(Elements.elementTypes.NONE);
     }
 
     public override void ExecuteAction()

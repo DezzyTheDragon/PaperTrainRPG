@@ -9,6 +9,7 @@ public class TestAttack : CombatActionBase
         type = targetType.FOE;
         name = "Test";
         description = "Test Attack.";
+        element = new Elements(Elements.elementTypes.WATER);
     }
 
     public override void ExecuteAction()

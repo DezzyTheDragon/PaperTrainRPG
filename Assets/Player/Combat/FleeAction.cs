@@ -9,6 +9,7 @@ public class FleeAction : CombatActionBase
         type = targetType.NONE;
         name = "Flee";
         description = "Run away from the fight.";
+        element = new Elements(Elements.elementTypes.NONE);
     }
 
     public override void ExecuteAction()

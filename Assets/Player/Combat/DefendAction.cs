@@ -9,6 +9,7 @@ public class DefendAction : CombatActionBase
         type = targetType.NONE;
         name = "Defend";
         description = "Reduce incomming damage";
+        element = new Elements(Elements.elementTypes.NONE);
     }
 
     public override void ExecuteAction()

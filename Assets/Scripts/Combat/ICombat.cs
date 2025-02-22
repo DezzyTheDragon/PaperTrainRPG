@@ -7,6 +7,10 @@ public interface ICombat
     public string GetName();
     public void Highlight();
     public void Unhighlight();
-    public void DoTurn();
+    public void DoTurn(ICombat target, CombatActionBase action);
     //public void SetStatus(some paramater to indicate the status);
+
+    public void Damage(int baseDamage, Elements attackElement);
+
+    public bool IsFinished();
 }

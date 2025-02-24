@@ -11,7 +11,7 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     protected int currentHP;
     protected Elements element;
 
-    public void DoTurn()
+    public void DoTurn(ICombat target, CombatActionBase action)
     {
         throw new System.NotImplementedException();
     }
@@ -48,6 +48,11 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
         {
             currentHP = 0;
         }
+    }
+
+    public bool IsFinished()
+    {
+        throw new System.NotImplementedException();
     }
 
     // Start is called before the first frame update

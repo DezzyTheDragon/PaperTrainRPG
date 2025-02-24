@@ -1,0 +1,13 @@
+{
+    "defend_title":  "Defend",
+    "defend_desc":   "Reduce the incomming damage",
+    "flee_title":    "Run Away",
+    "flee_desc":     "Run away from the battle. [Insert action directions]",
+
+    "test1_title":  "Test Attack 1",
+    "test1_desc":   "Simple blast of magic energy. [Insert attack directions]",
+    "test2_title":  "Test Attack 2",
+    "test2_desc":   "[Insert description] [Insert attack directions]",
+    "heal_title":   "Test Heal",
+    "heal_desc":    "Magic that heals only a little. [Insert attack directions]"
+}

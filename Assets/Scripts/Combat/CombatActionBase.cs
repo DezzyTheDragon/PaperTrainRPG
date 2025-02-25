@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum targetType { FOE, AOE_FOE, ALLY, AOE_ALLY, NONE }
+public enum targetType { NONE, FOE, AOE_FOE, ALLY, AOE_ALLY }
 
 public class CombatActionBase
 {
@@ -30,7 +30,7 @@ public class CombatActionBase
         return element;
     }
 
-    public virtual void ExecuteAction()
+    public virtual void ExecuteAction(Animator animator)
     {
         
     }

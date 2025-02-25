@@ -73,10 +73,10 @@ public class CombatUI : MonoBehaviour
         spellBook.SetActive(false);
     }
 
-    public void initAttackPage(List<CombatActionBase> attacks)
+    public void initAttackPage(List<CombatAction> attacks)
     {
         int i = 0;
-        foreach(CombatActionBase attack in attacks)
+        foreach(CombatAction attack in attacks)
         {
             Vector3 pos = new Vector3(
                 attackContent.transform.position.x, 
@@ -86,9 +86,9 @@ public class CombatUI : MonoBehaviour
             Button tempButton = tempButtonObj.GetComponent<Button>();
             attackButtonList.Add(tempButton);
             ConfigCombatButton temp = tempButtonObj.GetComponent<ConfigCombatButton>();
-            tempButtonObj.name = attack.GetName() + " Button";
+            tempButtonObj.name = attack.langKey + " Button";
             
-            temp.setData(attack.GetName(), "", attack);
+            temp.setData(attack.langKey, "", attack);
             tempButton.onClick.AddListener(delegate { combatSystem.SetCombatAction(attack); });
 
             if(i > 0)
@@ -113,10 +113,10 @@ public class CombatUI : MonoBehaviour
 
     }
 
-    public void initActionPage(List<CombatActionBase> actions)
+    public void initActionPage(List<CombatAction> actions)
     {
         int i = 0;
-        foreach(CombatActionBase action in actions)
+        foreach(CombatAction action in actions)
         {
             Vector3 pos = new Vector3(
                 actionContent.transform.position.x, 
@@ -126,9 +126,9 @@ public class CombatUI : MonoBehaviour
             Button tempButton = tempButtonObj.GetComponent<Button>();
             actionButtonList.Add(tempButton);
             ConfigCombatButton temp = tempButtonObj.GetComponent<ConfigCombatButton>();
-            tempButtonObj.name = action.GetName() + " Button";
+            tempButtonObj.name = action.langKey + " Button";
 
-            temp.setData(action.GetName(), "", action);
+            temp.setData(action.langKey, "", action);
             tempButton.onClick.AddListener(delegate { combatSystem.SetCombatAction(action); });
 
             if (i > 0)

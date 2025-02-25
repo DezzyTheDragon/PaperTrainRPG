@@ -710,6 +710,45 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Combat"",
+            ""id"": ""7b79ae5f-af49-4c5a-b13c-baaa0dcb87f2"",
+            ""actions"": [
+                {
+                    ""name"": ""Button1"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e601928-fd2a-418a-9e3a-963f3e7b55b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8101f81e-6358-4d17-ac4f-4287832b2758"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a961e373-2c3b-47f2-b99e-c28ceca49dbe"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Button1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -729,6 +768,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_UI_navigation = m_UI.FindAction("navigation", throwIfNotFound: true);
         m_UI_confirm = m_UI.FindAction("confirm", throwIfNotFound: true);
         m_UI_back = m_UI.FindAction("back", throwIfNotFound: true);
+        // Combat
+        m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
+        m_Combat_Button1 = m_Combat.FindAction("Button1", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -972,6 +1014,52 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Combat
+    private readonly InputActionMap m_Combat;
+    private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
+    private readonly InputAction m_Combat_Button1;
+    public struct CombatActions
+    {
+        private @PlayerControls m_Wrapper;
+        public CombatActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Button1 => m_Wrapper.m_Combat_Button1;
+        public InputActionMap Get() { return m_Wrapper.m_Combat; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CombatActions set) { return set.Get(); }
+        public void AddCallbacks(ICombatActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CombatActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CombatActionsCallbackInterfaces.Add(instance);
+            @Button1.started += instance.OnButton1;
+            @Button1.performed += instance.OnButton1;
+            @Button1.canceled += instance.OnButton1;
+        }
+
+        private void UnregisterCallbacks(ICombatActions instance)
+        {
+            @Button1.started -= instance.OnButton1;
+            @Button1.performed -= instance.OnButton1;
+            @Button1.canceled -= instance.OnButton1;
+        }
+
+        public void RemoveCallbacks(ICombatActions instance)
+        {
+            if (m_Wrapper.m_CombatActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICombatActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CombatActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CombatActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CombatActions @Combat => new CombatActions(this);
     public interface I_3DMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -989,5 +1077,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnNavigation(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
+    }
+    public interface ICombatActions
+    {
+        void OnButton1(InputAction.CallbackContext context);
     }
 }

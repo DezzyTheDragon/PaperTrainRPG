@@ -48,7 +48,7 @@ public class CombatSystem : MonoBehaviour
     //private int enemyIndex = 0;
     //private int enemyCount;
 
-    private CombatActionBase playerAction;
+    private CombatAction playerAction;
 
     private List<GameObject> enemyList = new List<GameObject>();
     private GameObject player;
@@ -61,6 +61,8 @@ public class CombatSystem : MonoBehaviour
 
     [Header("DEBUG")]
     public List<GameObject> enemyRoster = new List<GameObject>();
+    public List<CombatAction> miscActions = new List<CombatAction>();
+    public List<CombatAction> attackActions = new List<CombatAction>();
 
     private void Start()
     {
@@ -86,9 +88,13 @@ public class CombatSystem : MonoBehaviour
         currentState = combatState.BUILD;
         // Create and place player objects
         player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
+
         //TESTING ===========
-        combatUI.initAttackPage(PlayerStats.GetInstatnce().GetAttackActions());
-        combatUI.initActionPage(PlayerStats.GetInstatnce().GetActions());
+        //combatUI.initAttackPage(PlayerStats.GetInstatnce().GetAttackActions());
+        //combatUI.initActionPage(PlayerStats.GetInstatnce().GetActions());
+
+        combatUI.initAttackPage(attackActions);
+        combatUI.initActionPage(miscActions);
         //===================
 
         // NOTE: If a companion is added they would be created here as well
@@ -108,16 +114,16 @@ public class CombatSystem : MonoBehaviour
         currentState = combatState.ACTION_SELECT;
     }
     
-    public void SetCombatAction(CombatActionBase action)
+    public void SetCombatAction(CombatAction action)
     {
         playerAction = action;
         combatUI.HideBook();
         currentState = combatState.TARGET_SELECT;
-        if(action.GetTargetType() == targetType.NONE)
+        if(action.type == targetType.NONE)
         {
             //Advance battle state
         }
-        else if(action.GetTargetType() == targetType.AOE_FOE || action.GetTargetType() == targetType.AOE_ALLY)
+        else if(action.type == targetType.AOE_FOE || action.type == targetType.AOE_ALLY)
         {
             /*
             //Request AEO target
@@ -134,7 +140,7 @@ public class CombatSystem : MonoBehaviour
             }
             */
         }
-        else if(action.GetTargetType() == targetType.FOE || action.GetTargetType() == targetType.ALLY)
+        else if(action.type == targetType.FOE || action.type == targetType.ALLY)
         {
             //Request single target
             combatUI.RequestSingleTarget();
@@ -156,6 +162,9 @@ public class CombatSystem : MonoBehaviour
     public void SetTarget(GameObject enemy) 
     {
         currentState = combatState.ATTACK_PHASE;
+
+        player.GetComponent<ICombat>().DoTurn(enemy.GetComponent<ICombat>(), playerAction);
+
         //Advance combat state after target selection
     }
 

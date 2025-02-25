@@ -11,9 +11,14 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     protected int currentHP;
     protected Elements element;
 
-    public void DoTurn(ICombat target, CombatActionBase action)
+    public void DoTurn(ICombat target, CombatAction action)
     {
         throw new System.NotImplementedException();
+    }
+
+    public int GetPosition()
+    {
+        return 0;
     }
 
     public string GetName()

@@ -9,7 +9,7 @@ public class ConfigCombatButton : MonoBehaviour
     private string actionName;
     private TMP_Text text;
     private Texture2D image;
-    private CombatActionBase combatAction;
+    private CombatAction combatAction;
     [SerializeField] private GameObject icon;
     [SerializeField] private GameObject buttonText;
 
@@ -18,7 +18,7 @@ public class ConfigCombatButton : MonoBehaviour
         
     }
 
-    public void setData(string name, string resource, CombatActionBase action)
+    public void setData(string name, string resource, CombatAction action)
     {
         actionName = name;
         text = buttonText.GetComponent<TMP_Text>();
@@ -28,7 +28,7 @@ public class ConfigCombatButton : MonoBehaviour
         combatAction = action;
     }
 
-    public CombatActionBase getButtonAction() 
+    public CombatAction getButtonAction() 
     { 
         return combatAction; 
     }

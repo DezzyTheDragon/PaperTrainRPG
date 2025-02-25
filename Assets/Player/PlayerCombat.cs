@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCombat : MonoBehaviour, ICombat
 {
     PlayerStats stats = PlayerStats.GetInstatnce();
 
     [SerializeField] private GameObject indicator;
+    [SerializeField] private Canvas canvas;
 
     private Animator animator;
 
-    CombatActionBase combatAction;
+    CombatAction combatAction;
     ICombat target;
 
     // Start is called before the first frame update
@@ -26,10 +28,29 @@ public class PlayerCombat : MonoBehaviour, ICombat
 
     }
 
-    public void DoTurn(ICombat target, CombatActionBase action)
+    public void DoTurn(ICombat target, CombatAction action)
     {
         this.target = target;
         combatAction = action;
+
+        Debug.Log("Doing player turn");
+
+        //combatAction.ExecuteAction(animator);
+        GameObject ui = Instantiate(action.QTE_UI, canvas.gameObject.transform);
+        ui.GetComponent<TestAttack1UI>().SetPlayerRef(this);
+        //Later pass player ref so QTE can inform player QTE is over
+    }
+
+    public void QTEFinished(bool status) 
+    {
+        //play animation
+
+        target.Damage(combatAction.baseDamage, new Elements(combatAction.element));
+    }
+
+    public int GetPosition()
+    {
+        return 0;
     }
 
     public string GetName()

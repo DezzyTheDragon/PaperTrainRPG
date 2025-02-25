@@ -688,6 +688,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Combat",
+            "id": "7b79ae5f-af49-4c5a-b13c-baaa0dcb87f2",
+            "actions": [
+                {
+                    "name": "Button1",
+                    "type": "Button",
+                    "id": "3e601928-fd2a-418a-9e3a-963f3e7b55b4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8101f81e-6358-4d17-ac4f-4287832b2758",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a961e373-2c3b-47f2-b99e-c28ceca49dbe",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

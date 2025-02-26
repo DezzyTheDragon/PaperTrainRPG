@@ -12,7 +12,7 @@ public class Elements
     // FIRE beats AIR
     // EATHER beats all
     // NONE beats none
-    private Dictionary<elementTypes, elementTypes> typeEffective = new Dictionary<elementTypes, elementTypes>()
+    private static Dictionary<elementTypes, elementTypes> typeEffective = new Dictionary<elementTypes, elementTypes>()
     {
         { elementTypes.AIR, elementTypes.EARTH },
         { elementTypes.EARTH, elementTypes.WATER },
@@ -20,23 +20,29 @@ public class Elements
         { elementTypes.FIRE, elementTypes.AIR }
     };
 
-    private elementTypes type;
+    //private elementTypes type;
 
-    public Elements(elementTypes type)
+    /*public Elements(elementTypes type)
     {
         this.type = type;
-    }
+    }*/
 
-    public elementTypes GetElementType()
+    /*public elementTypes GetElementType()
     {
         return type;
-    }
+    }*/
 
-    public bool IsStrongAgainst(Elements other)
+    public static bool IsStrongAgainst(elementTypes us, elementTypes other)
     {
-        elementTypes otherType = other.GetElementType();
-
-        if (typeEffective[type] == otherType || type == elementTypes.EATHER)
+        //elementTypes otherType = other.GetElementType();
+        if(us != elementTypes.NONE)
+        {
+            if (typeEffective[us] == other)
+            {
+                return true;
+            }
+        }
+        else if (us == elementTypes.EATHER)
         {
             return true;
         }
@@ -44,13 +50,21 @@ public class Elements
         return false;
     }
 
-    public bool IsWeakAgainst(Elements other)
+    public static bool IsWeakAgainst(elementTypes us, elementTypes other)
     {
-        elementTypes otherType = other.GetElementType();
+        //elementTypes otherType = other.GetElementType();
 
-        if (typeEffective[otherType] == type || type == elementTypes.NONE)
+        try
         {
-            return true;
+            if (typeEffective[other] == us || us == elementTypes.NONE)
+            {
+                return true;
+            }
+        }
+        catch(System.Exception e)
+        {
+            Debug.LogError("ERROR: There was an error referencing element weakness! Types: " + other.ToString() + " and " + us.ToString());
+            Debug.LogError(e);
         }
 
         return false;

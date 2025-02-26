@@ -43,14 +43,19 @@ public class PlayerCombat : MonoBehaviour, ICombat
 
     public void QTEFinished(bool status) 
     {
-        //play animation
+        animator.SetInteger("position", target.GetPosition());
+        animator.SetInteger("attackID", combatAction.animationID);
+        //The animation starts playing
+    }
 
-        target.Damage(combatAction.baseDamage, new Elements(combatAction.element));
+    public void SetPosition(int pos)
+    {
+
     }
 
     public int GetPosition()
     {
-        return 0;
+        return 1;
     }
 
     public string GetName()
@@ -73,13 +78,17 @@ public class PlayerCombat : MonoBehaviour, ICombat
         return false;
     }
 
-    public void Damage(int baseDamage, Elements attackElement)
+    public void Damage(int baseDamage, Elements.elementTypes attackElement)
     {
         throw new System.NotImplementedException();
     }
 
+    //This function is called from an animation event
     public void DoDamage()
     {
+        animator.SetInteger("position", 0);
+        animator.SetInteger("attackID", 0);
+        target.Damage(combatAction.baseDamage, combatAction.element);
         Debug.Log("Damage the enemy");
     }
 }

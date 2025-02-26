@@ -15,5 +15,6 @@ MonoBehaviour:
   type: 1
   baseDamage: 1
   langKey: testAttack1
+  animationID: 1
   element: 2
   QTE_UI: {fileID: 1854238879665971362, guid: f31206c80fca0a347a19a0968073e0f6, type: 3}

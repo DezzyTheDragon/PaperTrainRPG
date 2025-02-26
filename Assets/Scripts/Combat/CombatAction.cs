@@ -8,6 +8,7 @@ public class CombatAction : ScriptableObject
     public targetType type;
     public int baseDamage;
     public string langKey;
+    public int animationID;
     public Elements.elementTypes element;
     public GameObject QTE_UI;
 }

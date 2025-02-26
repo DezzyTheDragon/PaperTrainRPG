@@ -95,8 +95,14 @@ public class TestAttack1UI : MonoBehaviour
 
     private void QTE_End()
     {
+        StartCoroutine(DestroyOnDelay());
         playerRef.QTEFinished(success);
 
+    }
+
+    private IEnumerator DestroyOnDelay()
+    {
+        yield return new WaitForEndOfFrame();
         Destroy(this.gameObject);
     }
 }

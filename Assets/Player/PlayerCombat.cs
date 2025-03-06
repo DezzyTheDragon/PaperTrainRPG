@@ -11,6 +11,7 @@ public class PlayerCombat : MonoBehaviour, ICombat
     [SerializeField] private Canvas canvas;
 
     private Animator animator;
+    private CombatSystem cbs;
 
     CombatAction combatAction;
     ICombat target;
@@ -20,6 +21,11 @@ public class PlayerCombat : MonoBehaviour, ICombat
     {
         indicator.SetActive(false);
         animator = GetComponent<Animator>();
+        cbs = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatSystem>();
+        if (cbs == null)
+        {
+            throw new System.Exception("Failed to find GameManager with CombatSystem component");
+        }
     }
 
     // Update is called once per frame
@@ -90,5 +96,6 @@ public class PlayerCombat : MonoBehaviour, ICombat
         animator.SetInteger("attackID", 0);
         target.Damage(combatAction.baseDamage, combatAction.element);
         Debug.Log("Damage the enemy");
+        cbs.OnTurnEnd();
     }
 }

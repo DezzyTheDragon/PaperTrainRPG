@@ -17,13 +17,16 @@ struct battleConfig
 public class CombatSystem : MonoBehaviour
 {
     private combatState currentState;
+    private bool isPlayerTurn;
     //private int enemyIndex = 0;
     //private int enemyCount;
 
     private CombatAction playerAction;
 
-    private List<GameObject> enemyList = new List<GameObject>();
-    private GameObject player;
+    private GameObject player;  //GameObject that represents the playable character
+    private List<GameObject> enemyList = new List<GameObject>();    //The list that contains the GameObjects for the enemies in the scene
+    private List<GameObject> deadEnemyQueue = new List<GameObject>(); //List of enemies to get rid of at the end of the turn action
+
 
     [Header("Config")]
     public GameObject playerPrefab;
@@ -88,6 +91,7 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         currentState = combatState.ACTION_SELECT;
+        isPlayerTurn = true;
     }
     
     public void SetCombatAction(CombatAction action)
@@ -126,7 +130,8 @@ public class CombatSystem : MonoBehaviour
 
     public void EnemyTurn()
     {
-
+        //TESTING
+        OnTurnEnd();
     }
 
     //Evaluate the state of battle
@@ -137,5 +142,37 @@ public class CombatSystem : MonoBehaviour
         //Is player alive?
 
         //Did enemy die?
+        bool rosterChange = false;
+        foreach(GameObject dead in deadEnemyQueue)
+        {
+            //Remove enemy from field
+            enemyList.Remove(dead);
+
+            Destroy(dead);
+
+            rosterChange = true;
+        }
+
+        if (rosterChange)
+        {
+            combatUI.RecalculateEnemySelection(enemyList);
+        }
+
+        if (isPlayerTurn)
+        {
+            isPlayerTurn = false;
+            EnemyTurn();
+        }
+        else
+        {
+            currentState = combatState.ACTION_SELECT;
+            isPlayerTurn = true;
+            combatUI.ShowBook();
+        }
+    }
+
+    public void NotifyIsDead(GameObject deadEnemy)
+    {
+        deadEnemyQueue.Add(deadEnemy);
     }
 }

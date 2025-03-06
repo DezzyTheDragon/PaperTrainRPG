@@ -12,6 +12,7 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     protected string enemyName = "EnemyBase";
     protected Elements.elementTypes element = Elements.elementTypes.NONE;
 
+    private CombatSystem cbs;
 
     public void DoTurn(ICombat target, CombatAction action)
     {
@@ -64,7 +65,17 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
         if (currentHP < 0)
         {
             currentHP = 0;
+            IsDead();
         }
+        Debug.Log(this.gameObject.name + " HP: " + currentHP + "/" + maxHP);
+    }
+
+    private void IsDead() 
+    {
+        //TODO: Add animation
+
+        //TODO: Add function in combat system to notify the enemy has died
+        cbs.NotifyIsDead(this.gameObject);
     }
 
     public bool IsFinished()
@@ -76,6 +87,11 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     void Start()
     {
         currentHP = maxHP;
+        cbs = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatSystem>();
+        if (cbs == null)
+        {
+            throw new System.Exception(this.gameObject.name + " failed to find GameManager object with CombatSystem component.");
+        }
     }
 
     // Update is called once per frame

@@ -172,6 +172,16 @@ public class CombatUI : MonoBehaviour
         }
     }
 
+    public void RecalculateEnemySelection(List<GameObject> enemies)
+    {
+        foreach(Button btn in enemyButtonList)
+        {
+            Destroy(btn.gameObject);
+        }
+        enemyButtonList.Clear();
+        initEnemySelection(enemies);
+    }
+
     private void clearLeftPage()
     {
         magicPageImage.SetActive(false);

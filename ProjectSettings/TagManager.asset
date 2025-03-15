@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LoadingZone
   - GameManager
+  - CombatSpawn
   layers:
   - Default
   - TransparentFX

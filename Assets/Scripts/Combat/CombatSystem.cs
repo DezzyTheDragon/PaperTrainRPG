@@ -18,6 +18,7 @@ public class CombatSystem : MonoBehaviour
 {
     private combatState currentState;
     private bool isPlayerTurn;
+    private int enemyIndex = 0;
     //private int enemyIndex = 0;
     //private int enemyCount;
 
@@ -30,6 +31,7 @@ public class CombatSystem : MonoBehaviour
 
     [Header("Config")]
     public GameObject playerPrefab;
+    public GameObject enemySpawn;
     public List<GameObject> enemySpawns = new List<GameObject>();
     public GameObject playerSpawn;
     [SerializeField] private CombatUI combatUI;
@@ -78,7 +80,9 @@ public class CombatSystem : MonoBehaviour
         int i = 0;
         foreach (GameObject enemy in enemyRoster)
         {
-            GameObject enemyObj = Instantiate(enemy, enemySpawns[i].transform.position, Quaternion.identity);
+            //GameObject enemyObj = Instantiate(enemy, enemySpawns[i].transform.position, Quaternion.identity);
+            GameObject enemyObj = Instantiate(enemy, enemySpawn.transform.position, Quaternion.identity);
+
             ICombat enemyCombat = enemyObj.GetComponent<ICombat>();
             enemyCombat.SetPosition(i + 1);
 
@@ -131,7 +135,8 @@ public class CombatSystem : MonoBehaviour
     public void EnemyTurn()
     {
         //TESTING
-        OnTurnEnd();
+        //OnTurnEnd();
+        enemyList[enemyIndex].GetComponent<ICombat>().DoTurn(player.GetComponent<ICombat>(), null);
     }
 
     //Evaluate the state of battle
@@ -163,8 +168,14 @@ public class CombatSystem : MonoBehaviour
             isPlayerTurn = false;
             EnemyTurn();
         }
+        else if (++enemyIndex < enemyList.Count && !isPlayerTurn)
+        {
+            //enemyIndex++;
+            EnemyTurn();
+        }
         else
         {
+            enemyIndex = 0;
             currentState = combatState.ACTION_SELECT;
             isPlayerTurn = true;
             combatUI.ShowBook();

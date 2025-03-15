@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyCombatBase : MonoBehaviour, ICombat
@@ -8,20 +10,53 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
     [SerializeField] private GameObject indicator;
     [SerializeField] protected int defense = 0;
     [SerializeField] protected int maxHP = 10;
+    [SerializeField] protected Elements.elementTypes element = Elements.elementTypes.NONE;
+    [SerializeField] protected string enemyName = "EnemyBase";
+
+    [SerializeField] private GameObject root;
+
     protected int currentHP;
-    protected string enemyName = "EnemyBase";
-    protected Elements.elementTypes element = Elements.elementTypes.NONE;
 
     private CombatSystem cbs;
+    //private List<GameObject> spawnReference;
+
+    private Animator animator;
+
+    private ICombat playerRef;
+
+    private void OnEnable()
+    {
+        currentHP = maxHP;
+        animator = GetComponent<Animator>();
+        cbs = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatSystem>();
+        if (cbs == null)
+        {
+            throw new System.Exception(this.gameObject.name + " failed to find GameManager object with CombatSystem component.");
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void DoTurn(ICombat target, CombatAction action)
     {
-        throw new System.NotImplementedException();
+        playerRef = target;
+        animator.SetBool("attack", true);
     }
 
     public void SetPosition(int pos)
     {
         position = pos;
+        animator.SetInteger("position", pos);
     }
 
     public int GetPosition()
@@ -83,22 +118,27 @@ public class EnemyCombatBase : MonoBehaviour, ICombat
         throw new System.NotImplementedException();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    //Called by animation to signal the attack is in block range
+    public void SignalBlock(int enabled)
     {
-        currentHP = maxHP;
-        cbs = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatSystem>();
-        if (cbs == null)
-        {
-            throw new System.Exception(this.gameObject.name + " failed to find GameManager object with CombatSystem component.");
-        }
+        bool canBlock = enabled == 0 ? false : true;
+        Debug.Log(gameObject.name + "'s attack can be blocked: " + canBlock.ToString());
     }
 
-    // Update is called once per frame
-    void Update()
+    //Called by animation attack node
+    public void DoDamage()
     {
-        
+        SignalBlock(0);
+        Debug.Log(gameObject.name + " attacked");
     }
 
+    //Called right before going back to idle animation node
+    public void AnimationLoopEnd()
+    {
+        //animator.SetInteger("position", 0);
+        animator.SetBool("attack", false);
+        Debug.Log(gameObject.name + " ended attack cycle");
+        cbs.OnTurnEnd();
+    }
     
 }

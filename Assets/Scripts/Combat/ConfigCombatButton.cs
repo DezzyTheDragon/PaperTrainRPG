@@ -23,7 +23,7 @@ public class ConfigCombatButton : MonoBehaviour
         actionName = name;
         text = buttonText.GetComponent<TMP_Text>();
         text.text = name;
-        Debug.LogError("Texture loading not implemented");
+        //Debug.LogError("Texture loading not implemented");
         //image = icon.GetComponent<>();
         combatAction = action;
     }

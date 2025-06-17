@@ -24,8 +24,13 @@ An RPG game inspired by PMTTYD but with more horror like themes and imagry.
     </li>
 </ul>
 
+<h2>World Logic</h2>
+<p>Use of prime elements (earth, water, fire, air) with each representing different things and having good and bad aspects to each. Earth is resilience shadowed by stubbornness. Water is change and adaption shadowed by corruption and manipulation. Fire is life shadowed by destruction. And Air is freedom(?) shadowed by laziness(?).</p>
+
 <h2>Story</h2>
 <h3>Demo portion</h3>
-<p>Manned wolf girl has very recently lost her job. To clear her head she goes urban exploring, hearing of an abandon train station in a nearby forest on some internet forum. She goes and the station and off the bat it feels very off and unusual. From the outside it appears to be a small station but inside it is large and expansive. She makes her way into the basement where the message on the forum recomended she go and finds a `platonic shape`. Just as she reaches out to touch it she gets attacked by a monster. At this point the `PLATONIC SHAPE` seems to "chose" her and transforms into some sort of spell book. The book speaks to her and together they chase off the monster. Returning to the train platform the train appears out of nowhere.</p>
+<p>Manned wolf girl has very recently lost her job. To clear her head she goes urban exploring, hearing of an abandon train station in a nearby forest on some internet forum. She goes and the station and off the bat it feels very off and unusual. From the outside it appears to be a small station but inside it is large and expansive. She makes her way into the basement where the message on the forum recommended she go and finds a `platonic shape`. Just as she reaches out to touch it she gets attacked by a monster. At this point the `PLATONIC SHAPE` seems to "chose" her and transforms into some sort of spell book. The book speaks to her and together they chase off the monster. Returning to the train platform the train appears out of nowhere.</p>
+
+
 
 

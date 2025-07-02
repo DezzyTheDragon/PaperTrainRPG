@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectBase : MonoBehaviour, Interactable
 {
-    public void Interact()
+    public virtual void Interact()
     {
         Debug.Log("Interacted");
     }

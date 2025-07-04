@@ -16,7 +16,7 @@ public class LockedObject : ObjectBase
 {
     [Header("Locked Config")]
     public bool consumeKey = false;
-    //public itemObjectStructThing? keyItem;
+    public KeyItems key;
 
     public override void Interact()
     {
@@ -31,12 +31,12 @@ public class LockedObject : ObjectBase
 
     }
 
-    public void LockedLogic()
+    public virtual void LockedLogic()
     {
         Debug.Log("It is locked!");
     }
 
-    public void UnlockedLogic()
+    public virtual void UnlockedLogic()
     {
 
     }

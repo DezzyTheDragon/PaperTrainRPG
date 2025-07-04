@@ -15,6 +15,14 @@ public class PlayerWorld : MonoBehaviour
     private Vector3 movement;
     private Vector3 velocity;
     private CharacterController characterController;
+    private PlayerInput input;
+    //UI ==============================================
+    private bool uIActive = false;
+    private GameObject activeUIRoot;
+    private IUINav activeUINav;
+
+    [SerializeField]
+    private GameObject menuUI;
     //INTERACT ========================================
     [SerializeField]
     private GameObject indicator;
@@ -24,6 +32,7 @@ public class PlayerWorld : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        input = GetComponent<PlayerInput>();
     }
 
     void Start()
@@ -92,7 +101,24 @@ public class PlayerWorld : MonoBehaviour
 
     public void OnAction(InputAction.CallbackContext context) { }
 
-    public void OnMenu(InputAction.CallbackContext context) { }
+    public void OnMenu(InputAction.CallbackContext context) 
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            if (!uIActive)
+            {
+                OpenUI(menuUI);
+            }
+            else
+            {
+                if(activeUIRoot == menuUI)
+                {
+                    CloseUI();
+                }
+            }
+        }
+        
+    }
 
     public void WarpPosition(Vector3 pos) 
     {    
@@ -123,4 +149,25 @@ public class PlayerWorld : MonoBehaviour
     }
 
     
+    public void OpenUI(GameObject uiRoot)
+    {
+        input.SwitchCurrentActionMap("UI");
+        activeUIRoot = uiRoot;
+        uIActive = true;
+        uiRoot.SetActive(true);
+        activeUINav = uiRoot.GetComponent<IUINav>();
+        if(activeUINav == null)
+        {
+            Debug.LogError(uiRoot.gameObject.name + " does not have a script with IUINav");
+            CloseUI();
+        }
+    }
+
+    public void CloseUI()
+    {
+        activeUIRoot.SetActive(false);
+        activeUIRoot = null;
+        uIActive = false;
+        input.SwitchCurrentActionMap("3DMovement");
+    }
 }

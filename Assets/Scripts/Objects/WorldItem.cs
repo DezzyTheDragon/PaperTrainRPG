@@ -12,16 +12,27 @@ public class WorldItem : MonoBehaviour, Interactable
     private void Awake()
     {
         sprite.sprite = item.texture;
+        //TODO: Story flag and remove if already colected
     }
 
-    public void Interact()
+    public void Interact(GameObject interactor)
     {
-        throw new System.NotImplementedException();
+        PlayerWorld temp = interactor.GetComponent<PlayerWorld>();
+        if(item.tag == ItemTag.KEYS)
+        {
+            temp.inventory.AddKeyItem((KeyItems)item);
+        }
+
+        //TODO: Story flag to indicate this particular item has been colected
+
+        temp.ForceInteractionClose();
+
+        Destroy(this.gameObject);
     }
 
     public bool isInteractable()
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
 }

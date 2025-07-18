@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerWorld : MonoBehaviour
 {
+    public PlayerInventory inventory;
+
     //MOVEMENT ========================================
     private float speed = 2.5f;
     private bool canMove = true;
@@ -33,6 +35,7 @@ public class PlayerWorld : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         input = GetComponent<PlayerInput>();
+        inventory = PlayerInventory.GetInstance();
     }
 
     void Start()
@@ -95,7 +98,10 @@ public class PlayerWorld : MonoBehaviour
     {
         if (interactable != null) 
         {
-            interactable.Interact();
+            if (interactable.isInteractable())
+            {
+                interactable.Interact(this.gameObject);
+            }
         }
     }
 
@@ -133,8 +139,11 @@ public class PlayerWorld : MonoBehaviour
         Interactable temp = other.GetComponent<Interactable>();
         if(temp != null)
         {
-            indicator.SetActive(true);
-            interactable = temp;
+            if (temp.isInteractable())
+            {
+                indicator.SetActive(true);
+                interactable = temp;
+            }
         }
     }
 
@@ -148,7 +157,12 @@ public class PlayerWorld : MonoBehaviour
         }
     }
 
-    
+    public void ForceInteractionClose()
+    {
+        indicator.SetActive(false);
+        interactable = null;
+    }
+
     public void OpenUI(GameObject uiRoot)
     {
         input.SwitchCurrentActionMap("UI");

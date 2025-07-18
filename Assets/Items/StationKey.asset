@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccf39b9e52f1475419579e761db31a12, type: 3}
-  m_Name: TestKey
+  m_Name: StationKey
   m_EditorClassIdentifier: 
-  id: 0
+  id: 1
   tag: 1
-  nameKey: TEST_KEY
+  nameKey: StationKey
   resourceString: 
   texture: {fileID: 21300000, guid: 685b3f9b3f7dc8d46959e2569574af9a, type: 3}

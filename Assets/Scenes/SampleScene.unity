@@ -1227,7 +1227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   consumeKey: 1
-  key: {fileID: 0}
+  key: {fileID: 11400000, guid: 8c3423069fa6e8a4791caff6e6497159, type: 2}
 --- !u!1 &876183326
 GameObject:
   m_ObjectHideFlags: 0

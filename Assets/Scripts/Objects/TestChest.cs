@@ -4,8 +4,22 @@ using UnityEngine;
 
 public class TestChest : LockedObject
 {
-    private void Start()
+    private bool isLocked = true;
+
+    public override void LockedLogic()
     {
-        
+        base.LockedLogic();
+    }
+
+    public override void UnlockedLogic()
+    {
+        base.UnlockedLogic();
+        player.GetComponent<PlayerWorld>().ForceInteractionClose();
+        isLocked = false;
+    }
+
+    public override bool isInteractable()
+    {
+        return isLocked;
     }
 }

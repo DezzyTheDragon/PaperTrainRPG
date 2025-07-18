@@ -14,21 +14,26 @@ using UnityEngine;
 
 public class LockedObject : ObjectBase
 {
+    protected GameObject player;
+    
     [Header("Locked Config")]
     public bool consumeKey = false;
     public KeyItems key;
 
-    public override void Interact()
+    public override void Interact(GameObject interactor)
     {
-        //TODO: Implement inventory check logic
-        //if(no item)
-        //  LockedLogic()
-        //else
-        //  maybe remove
-        //  UnlockedLogic()
+        player = interactor;
+        PlayerInventory playerInventory = interactor.GetComponent<PlayerWorld>().inventory;
 
-        LockedLogic();
-
+        if (playerInventory.CheckKeyItem(key))
+        {
+            playerInventory.RemoveKeyItem(key);
+            UnlockedLogic();
+        }
+        else
+        {
+            LockedLogic();
+        }
     }
 
     public virtual void LockedLogic()
@@ -38,7 +43,7 @@ public class LockedObject : ObjectBase
 
     public virtual void UnlockedLogic()
     {
-
+        Debug.Log("It is unlocked!");
     }
 
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ObjectBase : MonoBehaviour, Interactable
 {
-    public virtual void Interact()
+    public virtual void Interact(GameObject interactor)
     {
         Debug.Log("Interacted");
     }
 
-    public bool isInteractable()
+    public virtual bool isInteractable()
     {
         return true;
     }
